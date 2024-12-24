@@ -3,10 +3,9 @@
     width: 100vw;
     height: 100vh;
     overflow: hidden;
-    background: #000; /* Black background for contrast */
+    background-color: rgba(0, 0, 0, 0); /* Fully transparent background */
     color: white;
   }
-  
   .dot-container {
     position: relative;
     width: 100%;

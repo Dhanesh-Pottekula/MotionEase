@@ -3,7 +3,7 @@ import React, { useRef, useEffect, useState } from "react";
 import "./showDot.css"; // Import CSS for styling
 import useDetectionHook from "../mlService.js/poseDetection";
 
-const DOT_COUNT = 5; // Number of dots in the animation
+const DOT_COUNT = 2; // Number of dots in the animation
 const MOVEMENT_MULTIPLIER = 3; // Adjust sensitivity for smoother movement
 
 const HeadMovementTracker = () => {
@@ -56,9 +56,6 @@ const HeadMovementTracker = () => {
 
   return (
     <div className="tracker-container">
-      <p>
-        Movement: Δx = {(movement.deltaX * 100).toFixed(2)}, Δy = {(movement.deltaY * 100).toFixed(2)}
-      </p>
       <div className="dot-container">
         {dots.map((dot, index) => (
           <div
