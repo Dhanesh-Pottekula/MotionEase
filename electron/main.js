@@ -22,6 +22,7 @@ function createMainWindow() {
 
   // Set the window to be visible on all workspaces
   mainWindow.setVisibleOnAllWorkspaces(true, { visibleOnFullScreen: true });
+  mainWindow.setIgnoreMouseEvents(true);
 
   const startURL = isDev
     ? 'http://localhost:3000'
