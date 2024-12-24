@@ -4,7 +4,6 @@ import * as poseDetection from "@tensorflow-models/pose-detection";
 import "@tensorflow/tfjs-backend-webgl"; // Ensure the WebGL backend is included
 function useDetectionHook() {
   const videoRef = useRef(null);
-  const [distance, setDistance] = useState(0);
   const [movement, setMovement] = useState({ deltaX: 0, deltaY: 0 });
 
   const previousPosition = useRef({ x: null, y: null });
@@ -22,10 +21,6 @@ function useDetectionHook() {
 
   const calculateHeadMetrics = (noseKeypoint) => {
     const { x, y } = noseKeypoint;
-
-    // Calculate the distance from the origin (0, 0)
-    const newDistance = Math.sqrt(x ** 2 + y ** 2);
-    setDistance(newDistance);
 
     // Calculate movement (deltaX, deltaY)
     if (
@@ -84,7 +79,6 @@ function useDetectionHook() {
     initialize();
   }, []);
   return {
-    distance,
     movement,
     videoRef,
   };

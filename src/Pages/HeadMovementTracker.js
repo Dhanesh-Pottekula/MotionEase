@@ -4,10 +4,10 @@ import "./showDot.css"; // Import CSS for styling
 import useDetectionHook from "../mlService.js/poseDetection";
 
 const DOT_COUNT = 5; // Number of dots in the animation
-const MOVEMENT_MULTIPLIER = 2.5; // Adjust sensitivity for smoother movement
+const MOVEMENT_MULTIPLIER = 3; // Adjust sensitivity for smoother movement
 
 const HeadMovementTracker = () => {
-  const { distance, movement, videoRef } = useDetectionHook();
+  const {  movement, videoRef } = useDetectionHook();
 
   const [dots, setDots] = useState(() => {
     const centerX = window.innerWidth / 2; // Center X coordinate
@@ -28,8 +28,12 @@ const HeadMovementTracker = () => {
           // For the first dot (leader), update based on movement
           if (index === 0) {
             const leaderX = dot.x + movement.deltaX * MOVEMENT_MULTIPLIER;
-            const leaderY = dot.y + movement.deltaY * MOVEMENT_MULTIPLIER;
-            return { x: leaderX, y: leaderY };
+            const leaderY = dot.y + movement.deltaY * MOVEMENT_MULTIPLIER*1.5;
+            if(Math.abs(movement.deltaX)>1|| Math.abs(movement.deltaY )>1) {
+              return { x: leaderX, y: leaderY };
+            }else{
+              return { x: dot.x, y: dot.y };
+            }
           } else {
             // For other dots, each dot follows the previous one with smoothing
             const prevDot = prevDots[index - 1];
@@ -52,8 +56,6 @@ const HeadMovementTracker = () => {
 
   return (
     <div className="tracker-container">
-      <h1>Head Movement Tracker</h1>
-      <p>Distance from origin: {distance.toFixed(2)}</p>
       <p>
         Movement: Δx = {(movement.deltaX * 100).toFixed(2)}, Δy = {(movement.deltaY * 100).toFixed(2)}
       </p>
