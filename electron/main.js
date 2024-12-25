@@ -1,19 +1,20 @@
-const { app, BrowserWindow, ipcMain } = require('electron');
+const { app, BrowserWindow, ipcMain, screen } = require('electron');
 const path = require('path');
-
 let mainWindow;
 const isDev = !app.isPackaged;
-
 function createMainWindow() {
+  const { width, height } = screen.getPrimaryDisplay().workAreaSize;
   mainWindow = new BrowserWindow({
-    minWidth: 1200,
-    minHeight: 800,
+    width: width,
+    height: height,
+    // width: 1000,
+    // height: 600,
     frame: false,
     autoHideMenuBar: false,
     transparent: true,
     alwaysOnTop: true,
     webPreferences: {
-      preload: path.join(__dirname, 'electron', 'preload.js'),
+      preload: path.join(__dirname, 'preload.js'),
       contextIsolation: true, // Isolate context for security
       enableRemoteModule: false, // Disable remote module
       nodeIntegration: false, // Disable node integration
@@ -54,4 +55,12 @@ app.on('activate', () => {
   if (BrowserWindow.getAllWindows().length === 0) {
     createMainWindow();
   }
+});
+
+ipcMain.on('allow-mouse-events', (event, bounds) => {
+  mainWindow.setIgnoreMouseEvents(false);
+});
+
+ipcMain.on('reset-ignore-mouse-events', () => {
+  mainWindow.setIgnoreMouseEvents(true);
 });

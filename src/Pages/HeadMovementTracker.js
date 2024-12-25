@@ -7,7 +7,7 @@ const DOT_COUNT = 2; // Number of dots in the animation
 const MOVEMENT_MULTIPLIER = 3; // Adjust sensitivity for smoother movement
 
 const HeadMovementTracker = () => {
-  const {  movement, videoRef } = useDetectionHook();
+  const { movement, videoRef } = useDetectionHook();
 
   const [dots, setDots] = useState(() => {
     const centerX = window.innerWidth / 2; // Center X coordinate
@@ -15,8 +15,8 @@ const HeadMovementTracker = () => {
 
     // Create dots with random offsets around the center
     return Array.from({ length: DOT_COUNT }, () => ({
-      x: centerX , // Randomize X
-      y: centerY , // Randomize Y
+      x: centerX, // Randomize X
+      y: centerY, // Randomize Y
     }));
   });
 
@@ -28,10 +28,13 @@ const HeadMovementTracker = () => {
           // For the first dot (leader), update based on movement
           if (index === 0) {
             const leaderX = dot.x + movement.deltaX * MOVEMENT_MULTIPLIER;
-            const leaderY = dot.y + movement.deltaY * MOVEMENT_MULTIPLIER*1.5;
-            if(Math.abs(movement.deltaX)>1|| Math.abs(movement.deltaY )>1) {
+            const leaderY = dot.y + movement.deltaY * MOVEMENT_MULTIPLIER * 1.5;
+            if (
+              Math.abs(movement.deltaX) > 1 ||
+              Math.abs(movement.deltaY) > 1
+            ) {
               return { x: leaderX, y: leaderY };
-            }else{
+            } else {
               return { x: dot.x, y: dot.y };
             }
           } else {
@@ -54,8 +57,34 @@ const HeadMovementTracker = () => {
     return () => cancelAnimationFrame(interval);
   }, [movement]);
 
+  const resetDots = () => {
+    setDots(
+      Array.from({ length: DOT_COUNT }, () => {
+        const centerX = window.innerWidth / 2; // Center X coordinate
+        const centerY = window.innerHeight / 3.5; // Center Y coordinate
+        return { x: centerX, y: centerY };
+      })
+    );
+    disableMouseEvents();
+  };
+  const enableMouseEvents = () => {
+    window.electron.sendMessage("allow-mouse-events");
+  };
+  const disableMouseEvents =()=>{
+    window.electron.sendMessage("reset-ignore-mouse-events")
+  }
   return (
     <div className="tracker-container">
+      <button
+        className="reset-button"
+        onClick={resetDots}
+        onMouseEnter={enableMouseEvents}
+        onMouseLeave={() =>
+          disableMouseEvents()
+        }
+      >
+        Reset
+      </button>
       <div className="dot-container">
         {dots.map((dot, index) => (
           <div
@@ -69,7 +98,13 @@ const HeadMovementTracker = () => {
           />
         ))}
       </div>
-      <video ref={videoRef} style={{ display: "none" }} playsInline autoPlay muted />
+      <video
+        ref={videoRef}
+        style={{ display: "none" }}
+        playsInline
+        autoPlay
+        muted
+      />
     </div>
   );
 };

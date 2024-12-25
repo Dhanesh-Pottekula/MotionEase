@@ -6,6 +6,27 @@
     background-color: rgba(0, 0, 0, 0); /* Fully transparent background */
     color: white;
   }
+  .reset-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    padding: 10px 15px;
+    font-size: 16px;
+    background-color: rgba(244, 67, 54, 0.8); /* Red background with transparency */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    z-index: 1000;
+    opacity: 0.9; /* Overall transparency for the button */
+    transition: opacity 0.3s ease; /* Smooth transition for hover effect */
+  }
+  
+  .reset-button:hover {
+    opacity: 1; /* Fully opaque when hovered */
+    background-color: rgba(211, 47, 47, 0.9); /* Darker red with less transparency on hover */
+  }
+  
   .dot-container {
     position: relative;
     width: 100%;
@@ -19,6 +40,8 @@
     background: radial-gradient(circle, #ff5722 0%, #ff8a50 100%);
     border-radius: 50%;
     pointer-events: none;
+    opacity: 0.8; /* Makes the dot slightly transparent */
     transition: transform 0.2s ease-out, opacity 0.3s ease-in;
   }
+  
   
