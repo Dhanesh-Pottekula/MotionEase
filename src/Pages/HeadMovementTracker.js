@@ -28,7 +28,7 @@ const HeadMovementTracker = () => {
           // For the first dot (leader), update based on movement
           if (index === 0) {
             const leaderX = dot.x + movement.deltaX * MOVEMENT_MULTIPLIER;
-            const leaderY = dot.y + movement.deltaY * MOVEMENT_MULTIPLIER * 1.5;
+            const leaderY = dot.y + movement.deltaY * MOVEMENT_MULTIPLIER / 1.5;
             if (
               Math.abs(movement.deltaX) > 1 ||
               Math.abs(movement.deltaY) > 1
@@ -68,10 +68,10 @@ const HeadMovementTracker = () => {
     disableMouseEvents();
   };
   const enableMouseEvents = () => {
-    window.electron.sendMessage("allow-mouse-events");
+    window?.electron?.sendMessage("allow-mouse-events");
   };
   const disableMouseEvents =()=>{
-    window.electron.sendMessage("reset-ignore-mouse-events")
+    window?.electron?.sendMessage("reset-ignore-mouse-events")
   }
   return (
     <div className="tracker-container">
@@ -93,7 +93,7 @@ const HeadMovementTracker = () => {
             style={{
               left: `${dot.x}px`,
               top: `${dot.y}px`,
-              opacity: 1 - index / DOT_COUNT, // Fade out the trail
+              opacity: 0.5 - index/10, // Fade out the trail
             }}
           />
         ))}
