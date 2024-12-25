@@ -35,12 +35,12 @@
   
   .dot {
     position: absolute;
-    width: 35px;
-    height: 35px;
+    width: 55px;
+    height: 55px;
     background: radial-gradient(circle, #ff5722 0%, #ff8a50 100%);
     border-radius: 50%;
     pointer-events: none;
-    opacity: 0.8; /* Makes the dot slightly transparent */
+    opacity: 0.6; /* Makes the dot slightly transparent */
     transition: transform 0.2s ease-out, opacity 0.3s ease-in;
   }
   
