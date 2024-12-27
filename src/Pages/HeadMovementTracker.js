@@ -41,28 +41,23 @@ const HeadMovementTracker = () => {
   const [dots, setDots] = useState(initialPositions);
 
   useEffect(() => {
-    // Function to update dot positions smoothly
     const updateDots = () => {
       setDots((prevDots) => {
-        const newDots = prevDots.map((dot) => {
-          // Update each dot independently, based on its own previous position
+        return prevDots.map((dot) => {
           const newX = dot.x + movement.deltaX * MOVEMENT_MULTIPLIER;
           const newY = dot.y + movement.deltaY * MOVEMENT_MULTIPLIER / 1.5;
 
           return { x: newX, y: newY };
         });
-
-        return newDots;
       });
     };
 
-    // Use requestAnimationFrame for smoother updates
-    const interval = requestAnimationFrame(updateDots);
+    // Start the animation loop
+    let animationFrameId = requestAnimationFrame(updateDots);
 
     // Cleanup on component unmount
-    return () => cancelAnimationFrame(interval);
+    return () => cancelAnimationFrame(animationFrameId);
   }, [movement]);
-
   const resetDots = () => {
     setDots(initialPositions);
     disableMouseEvents();
