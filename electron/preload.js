@@ -8,7 +8,7 @@ contextBridge.exposeInMainWorld('electron', {
     if (validChannels.includes(channel)) {
       ipcRenderer.send(channel, data);
     }
-  },
+  },//TODO
 
   onMessage: (channel, callback) => {
     const validChannels = ['fromMain']; // Add the allowed channels

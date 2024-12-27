@@ -41,7 +41,7 @@
     border-radius: 50%;
     pointer-events: none;
     opacity: 0.8; /* Makes the dot slightly transparent */
-    transition: transform 0.2s ease-out, opacity 0.3s ease-in;
+    /* transition: transform 0.2s ease-out, opacity 0.3s ease-in; */
   }
   
   
