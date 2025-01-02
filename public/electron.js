@@ -29,7 +29,7 @@ function createMainWindow() {
   mainWindow.setIgnoreMouseEvents(true);
 
   if(isDev){
-    mainWindow.loadURL(startURL).then(() => {console.log('loaded')}).catch((err) => {console.log("failed to load the file",err)});
+    mainWindow.loadURL("http://localhost:3000").then(() => {console.log('loaded')}).catch((err) => {console.log("failed to load the file",err)});
   }else{
     mainWindow.loadURL(`file://${path.join(__dirname, '../build/index.html')}`)
     .then(() => {
@@ -41,7 +41,7 @@ function createMainWindow() {
   }
 
   // Optional: Open DevTools
-  mainWindow.webContents.openDevTools();
+  // mainWindow.webContents.openDevTools();
 
   // Handle window closed
   mainWindow.on('closed', () => {
