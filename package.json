@@ -5,6 +5,7 @@
   "author": "Dhanesh Uzumaki",
   "private": true,
   "main": "public/electron.js",
+  "homepage": "./",
   "dependencies": {
     "@craco/craco": "^7.1.0",
     "@tensorflow-models/pose-detection": "^2.1.3",
@@ -22,13 +23,15 @@
     "start": "react-scripts start",
     "react-start": "craco start",
     "electron": "concurrently \"BROWSER=none npm run start\" \"wait-on http://localhost:3000 && electron .\"",
-    "build": "electron-builder",
+    "build": "react-scripts build",
     "test": "craco test",
     "eject": "craco eject",
     "app:dir": "electron-builder --dir",
     "app:dist": "electron-builder",
     "preelectron-pack": "npm run-script build",
-    "electron-pack": "build --em.main=public/electron.js"
+    "electron-pack": "build --em.main=public/electron.js",
+    "package-mac": "electron-packager . --overwrite --tmpdir=false --platform=darwin --arch=x64  --prune=true --out=release-builds",
+    "package-win": "electron-packager . --overwrite --tmpdir=false --asar=true --platform=win32 --arch=ia32 --prune=true --out=release-builds"
   },
   "eslintConfig": {
     "extends": [
@@ -59,7 +62,9 @@
     "files": [
       "dist/**/*",
       "package.json",
-      "public/electron.js"
+      "build/electron.js",
+      "build/preload.js",
+      "build/**/*"
     ],
     "directories": {
       "buildResources": "assets",
@@ -76,7 +81,7 @@
       "icon": "build/icon.png"
     },
     "extraMetadata": {
-      "main": "public/electron.js"
+      "main": "build/electron.js"
     }
   }
 }
