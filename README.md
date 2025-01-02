@@ -18,35 +18,38 @@ Follow these steps to get the project up and running locally.
    ```bash
    git clone https://github.com/Dhanesh-Pottekula/MotionEase.git
    cd MotionEase
-Install the required dependencies
+## Project Setup
+
+To get started with the project, follow the steps below:
+
+### 1. Install Dependencies
+
+Run the following command to install the necessary dependencies for the project:
+
+```bash
 npm install
+```
 
-development
-bash
-Copy code
+## 2. Start the Development Environment
+
+To start both the React development server and the Electron app, run the following command:
+
+```bash
 npm run electron
+```
+### 3. Build the React App
 
-This will start:
-The React development server on http://localhost:3000.
-The Electron app, loading the React app inside the Electron window.
+When you're ready to build the React app for production, run:
 
-Build the React App
-bash
-Copy code
+```bash
 npm run build
-This builds the React app and outputs the optimized files into the /build/ directory, which will later be bundled with Electron.
-
+```
 Build the Electron App for Production
 Once the React app is built, package the Electron app for production with:
-
-bash
-Copy code
+```bash
 npm run app:dist
-This will:
-
-Build the React app (if not already built).
-Use electron-builder to package the Electron app into a distributable format.
-The final Electron app will be located in the /dist/ directory.
+```
+this builds the electron app for production
 
 Folder Structure
 Here’s the breakdown of the project structure:
