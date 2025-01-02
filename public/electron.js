@@ -2,6 +2,7 @@ const { app, BrowserWindow, ipcMain, screen } = require('electron');
 const path = require('path');
 let mainWindow;
 const isDev = !app.isPackaged;
+
 function createMainWindow() {
   const { width, height } = screen.getPrimaryDisplay().workAreaSize;
   mainWindow = new BrowserWindow({
@@ -10,6 +11,7 @@ function createMainWindow() {
     // width: 1000,
     // height: 600,
     frame: false,
+    show: true,
     autoHideMenuBar: false,
     transparent: true,
     alwaysOnTop: true,
@@ -19,21 +21,27 @@ function createMainWindow() {
       enableRemoteModule: false, // Disable remote module
       nodeIntegration: false, // Disable node integration
     },
+
   });
 
   // Set the window to be visible on all workspaces
   mainWindow.setVisibleOnAllWorkspaces(true, { visibleOnFullScreen: true });
   mainWindow.setIgnoreMouseEvents(true);
 
-  const startURL = isDev
-    ? 'http://localhost:3000'
-    : `file://${path.join(__dirname, '../build/index.html')}`;
-  
-  // Load React app
-  mainWindow.loadURL(startURL);
+  if(isDev){
+    mainWindow.loadURL(startURL).then(() => {console.log('loaded')}).catch((err) => {console.log("failed to load the file",err)});
+  }else{
+    mainWindow.loadURL(`file://${path.join(__dirname, '../build/index.html')}`)
+    .then(() => {
+      console.log('Loaded build/index.html');
+    })
+    .catch((err) => {
+      console.error('Failed to load the file:', err);
+    });
+  }
 
   // Optional: Open DevTools
-  // mainWindow.webContents.openDevTools();
+  mainWindow.webContents.openDevTools();
 
   // Handle window closed
   mainWindow.on('closed', () => {

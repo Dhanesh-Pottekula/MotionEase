@@ -1,7 +1,11 @@
 {
-  "name": "head-tracker",
+  "name": "sick-stop",
+  "description": "say Bye-Bye to your motion sickness and enjoy your travel",
   "version": "0.1.0",
+  "author": "Dhanesh Uzumaki",
   "private": true,
+  "main": "public/electron.js",
+  "homepage": "./",
   "dependencies": {
     "@craco/craco": "^7.1.0",
     "@tensorflow-models/pose-detection": "^2.1.3",
@@ -11,18 +15,24 @@
     "path-browserify": "^1.0.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-scripts": "5.0.1",
+
     "wait-on": "^8.0.1",
     "web-vitals": "^4.2.4"
   },
-"scripts": {
-  "start": "react-scripts start",
-  "react-start": "craco start",
-  "electron": "wait-on http://localhost:3000 && electron ./electron/main.js",
-  "build": "craco build && electron-builder",
-  "test": "craco test",
-  "eject": "craco eject"
-},
+  "scripts": {
+    "start": "react-scripts start",
+    "react-start": "craco start",
+    "electron": "concurrently \"BROWSER=none npm run start\" \"wait-on http://localhost:3000 && electron .\"",
+    "build": "react-scripts build",
+    "test": "craco test",
+    "eject": "craco eject",
+    "app:dir": "electron-builder --dir",
+    "app:dist": "electron-builder",
+    "preelectron-pack": "npm run-script build",
+    "electron-pack": "build --em.main=public/electron.js",
+    "package-mac": "electron-packager . --overwrite --tmpdir=false --platform=darwin --arch=x64  --prune=true --out=release-builds",
+    "package-win": "electron-packager . --overwrite --tmpdir=false --asar=true --platform=win32 --arch=ia32 --prune=true --out=release-builds"
+  },
   "eslintConfig": {
     "extends": [
       "react-app",
@@ -45,5 +55,33 @@
     "electron": "^33.2.1",
     "electron-builder": "^25.1.8",
     "electron-is-dev": "^3.0.1"
+  },
+  "build": {
+    "extends": null,
+    "appId": "com.motion-sick.id",
+    "files": [
+      "dist/**/*",
+      "package.json",
+      "build/electron.js",
+      "build/preload.js",
+      "build/**/*"
+    ],
+    "directories": {
+      "buildResources": "assets",
+      "output": "dist"
+    },
+    "mac": {
+      "category": "health",
+      "icon": "build/icon.png"
+    },
+    "win": {
+      "icon": "build/icon.png"
+    },
+    "linux": {
+      "icon": "build/icon.png"
+    },
+    "extraMetadata": {
+      "main": "build/electron.js"
+    }
   }
 }

@@ -3,68 +3,63 @@ import React, { useRef, useEffect, useState } from "react";
 import "./showDot.css"; // Import CSS for styling
 import useDetectionHook from "../mlService.js/poseDetection";
 
-const DOT_COUNT = 2; // Number of dots in the animation
+const DOT_COUNT = 1; // Number of dots in the animation
 const MOVEMENT_MULTIPLIER = 3; // Adjust sensitivity for smoother movement
 
 const HeadMovementTracker = () => {
+  const initialPositions = [
+    // Top-left corner (closer to the center)
+    { x: window.innerWidth * 0.3, y: window.innerHeight * 0.2 },
+    // Top-right corner (closer to the center)
+    { x: window.innerWidth * 0.70, y: window.innerHeight * 0.2 },
+    // Bottom-right corner (closer to the center)
+    { x: window.innerWidth * 0.70, y: window.innerHeight * 0.8 },
+    // Bottom-left corner (closer to the center)
+    { x: window.innerWidth * 0.3, y: window.innerHeight * 0.8 },
+  
+    // (top-left)
+    { x:window.innerWidth * 0.1, y: window.innerHeight*0.08 },
+    //left middle
+    { x:window.innerWidth * 0.1, y: window.innerHeight*0.5 },
+    // top-right
+    //  bottom-left)
+    { x: window.innerWidth * 0.1, y: window.innerHeight*0.9  },
+    { x: window.innerWidth*0.9, y:window.innerHeight*0.08  },
+    // middle-left
+    { x: window.innerWidth*0.9 , y: window.innerHeight*0.5 },
+    // bottom-left
+    { x: window.innerWidth*0.9 , y: window.innerHeight*0.9 },
+    // Center (exact middle)
+    { x: window.innerWidth / 2, y: window.innerHeight / 2 },
+
+
+  ];
+  
   const { movement, videoRef } = useDetectionHook();
 
-  const [dots, setDots] = useState(() => {
-    const centerX = window.innerWidth / 2; // Center X coordinate
-    const centerY = window.innerHeight / 3.5; // Center Y coordinate
 
-    // Create dots with random offsets around the center
-    return Array.from({ length: DOT_COUNT }, () => ({
-      x: centerX, // Randomize X
-      y: centerY, // Randomize Y
-    }));
-  });
+  const [dots, setDots] = useState(initialPositions);
 
   useEffect(() => {
-    // Function to update dot positions smoothly
     const updateDots = () => {
       setDots((prevDots) => {
-        const newDots = prevDots.map((dot, index) => {
-          // For the first dot (leader), update based on movement
-          if (index === 0) {
-            const leaderX = dot.x + movement.deltaX * MOVEMENT_MULTIPLIER;
-            const leaderY = dot.y + movement.deltaY * MOVEMENT_MULTIPLIER / 1.5;
-            if (
-              Math.abs(movement.deltaX) > 1 ||
-              Math.abs(movement.deltaY) > 1
-            ) {
-              return { x: leaderX, y: leaderY };
-            } else {
-              return { x: dot.x, y: dot.y };
-            }
-          } else {
-            // For other dots, each dot follows the previous one with smoothing
-            const prevDot = prevDots[index - 1];
-            const newX = prevDot.x + (dot.x - prevDot.x) * 0.5; // Smaller factor for smoother following
-            const newY = prevDot.y + (dot.y - prevDot.y) * 0.5; // Smaller factor for smoother following
-            return { x: newX, y: newY };
-          }
-        });
+        return prevDots.map((dot) => {
+          const newX = dot.x + movement.deltaX * MOVEMENT_MULTIPLIER;
+          const newY = dot.y + movement.deltaY * MOVEMENT_MULTIPLIER / 1.5;
 
-        return newDots;
+          return { x: newX, y: newY };
+        });
       });
     };
 
-    // Use requestAnimationFrame for smoother updates
-    const interval = requestAnimationFrame(updateDots);
+    // Start the animation loop
+    let animationFrameId = requestAnimationFrame(updateDots);
 
     // Cleanup on component unmount
-    return () => cancelAnimationFrame(interval);
+    return () => cancelAnimationFrame(animationFrameId);
   }, [movement]);
-
   const resetDots = () => {
-    setDots(
-      Array.from({ length: DOT_COUNT }, () => {
-        const centerX = window.innerWidth / 2; // Center X coordinate
-        const centerY = window.innerHeight / 3.5; // Center Y coordinate
-        return { x: centerX, y: centerY };
-      })
-    );
+    setDots(initialPositions);
     disableMouseEvents();
   };
   const enableMouseEvents = () => {
@@ -93,7 +88,6 @@ const HeadMovementTracker = () => {
             style={{
               left: `${dot.x}px`,
               top: `${dot.y}px`,
-              opacity: 0.5 - index/10, // Fade out the trail
             }}
           />
         ))}
